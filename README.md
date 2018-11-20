@@ -1,7 +1,7 @@
 # A Nova tool to help debug failed jobs
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/kregel/nova-failed-jobs-tool.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
-[![Total Downloads](https://img.shields.io/packagist/dt/kregel/nova-failed-jobs-tool.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/kregel/nova-weather-cards.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
+[![Total Downloads](https://img.shields.io/packagist/dt/kregel/nova-weather-cards.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
 
 ![Screenshot](./screenshot.png)
 
@@ -62,4 +62,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!
 
-[![Beerpay](https://beerpay.io/austinkregel/nova-weather-cards/badge.svg?style=beer-square)](https://beerpay.io/austinkregel/nova-failed-jobs-tool)  [![Beerpay](https://beerpay.io/austinkregel/nova-failed-jobs-tool/make-wish.svg?style=flat-square)](https://beerpay.io/austinkregel/nova-failed-jobs-tool?focus=wish)
+[![Beerpay](https://beerpay.io/austinkregel/nova-weather-cards/badge.svg?style=beer-square)](https://beerpay.io/austinkregel/nova-weather-cards)  [![Beerpay](https://beerpay.io/austinkregel/nova-weather-cards/make-wish.svg?style=flat-square)](https://beerpay.io/austinkregel/nova-weather-cards?focus=wish)
