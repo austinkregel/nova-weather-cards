@@ -7,7 +7,7 @@ All you will need is a developer token from darksky, and predis for key persiste
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kregel/nova-weather-cards.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
 [![Total Downloads](https://img.shields.io/packagist/dt/kregel/nova-weather-cards.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
 
-![Screenshot](./screenshot.png)
+![Screenshot](https://github.com/austinkregel/nova-weather-cards/raw/master/screenshot.png)
 
 ## Installation
 
