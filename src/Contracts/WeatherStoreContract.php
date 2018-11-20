@@ -9,5 +9,4 @@ use Kregel\DataStore\Contracts\DataStoreContract;
  */
 interface WeatherStoreContract extends DataStoreContract
 {
-
 }

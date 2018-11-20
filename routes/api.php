@@ -17,6 +17,21 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/endpoint', function (Request $request) {
 //     //
 // });
+Route::group([
+    'namespace' => 'Kregel\\NovaWeatherCards\\Http\\Controllers',
+    'middleware' => 'auth'
+], function() {
+    Route::get('/weather-proxy/{xcoord}/{ycoord}', 'WeatherProxyController@index');
+    Route::post('/weather-proxy/set-api-key', 'WeatherProxyController@saveKey');
 
-Route::get('/weather-proxy/{xcoord}/{ycoord}', 'Kregel\\NovaWeatherCards\\Http\\Controllers\\WeatherProxyController@index');
-Route::get('/weather-proxy/set-api-key', 'Kregel\\NovaWeatherCards\\Http\\Controllers\\WeatherProxyController@saveKey');
+    Route::get('/weather-icons/{type}', function (Request $request, $type) {
+        $file = __DIR__ . '/../dist/img/'. $type;
+
+        if (!file_exists($file)) {
+            return 'Your file doesnt exist';
+        }
+
+        header('Content-type: image/svg+xml');
+        return file_get_contents($file);
+    });
+});
