@@ -1,4 +1,8 @@
-# A Nova tool to help debug failed jobs
+# A Nova card to give you weather information
+Redis based storage, and powered by [darksky.net](https://darksky.net)
+
+All you will need is a developer token from darksky, and predis for key persistence.
+
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kregel/nova-weather-cards.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
 [![Total Downloads](https://img.shields.io/packagist/dt/kregel/nova-weather-cards.svg?style=flat-square)](https://packagist.org/packages/kregel/kregel/nova-weather-cards)
@@ -9,6 +13,9 @@
 
 You can install the package in to a Laravel app that uses [Nova](https://nova.laravel.com) via composer:
 
+```bash
+composer require predis/predis
+```
 ```bash
 composer require kregel/nova-weather-cards
 ```
