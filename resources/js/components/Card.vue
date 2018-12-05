@@ -31,12 +31,12 @@
                         <div>{{ currently.summary }}</div>
                     </div>
                 </div>
-                <div class="absolute pin-b pin-r m-2">
-                    <a class="pr-1" href="#" @click.prevent="changeToF">
+                <div class="absolute pin-b pin-r">
+                    <a class="pr-1 text-primary no-underline" href="#" @click.prevent="changeToF">
                         &deg;F
                     </a>
                     |
-                    <a class="pl-1" href="#" @click.prevent="changeToC">
+                    <a class="pl-1 text-primary no-underline" href="#" @click.prevent="changeToC">
                         &deg;C
                     </a>
                 </div>
@@ -65,11 +65,15 @@ export default {
                 weather = weather[0]
             }
             return weather.currently
+        },
+        language() {
+            return navigator.language.split('-')[0]
         }
     },
     methods: {
         url(latitude, longitude) {
-            return '/nova-vendor/nova-weather-cards/weather-proxy/' + latitude + '/' + longitude + '?unit=' + this.unit
+            console.log(this.language);
+            return '/nova-vendor/nova-weather-cards/weather-proxy/' + latitude + '/' + longitude + '?unit=' + this.unit + '&lang=' + this.language
         },
         weatherIcon() {
             return require('./WeatherIcons')(this.currently.icon);

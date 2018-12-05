@@ -8,6 +8,7 @@ use GuzzleHttp\Client;
 use Illuminate\Contracts\Redis\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Kregel\NovaWeatherCards\Contracts\WeatherStoreContract;
 use Kregel\NovaWeatherCards\WeatherStore;
@@ -47,9 +48,17 @@ class WeatherProxyController extends Controller
             return $this->weatherStore->get('location:'.$unit.$lat.$lang);
         }
 
-        $this->weatherStore->save('location:'.$unit.$lat.$lang, function () use ($lat, $lang, $unit) {
+        $this->weatherStore->save('location:'.$unit.$lat.$lang, function () use ($lat, $lang, $request) {
+            $queryParams = http_build_query($request->all());
             $weatherJson = (new Client)
-                ->get('https://api.darksky.net/forecast/' . $this->weatherStore->first(static::CACHE_API_KEY) . '/'.$lat.','.$lang . '?units=' . $unit . '&exclude=hourly,daily,minutely,flags')
+                ->get('https://api.darksky.net/forecast/'
+                    . $this->weatherStore->first(static::CACHE_API_KEY)
+                    . '/'
+                    .$lat
+                    .','
+                    .$lang
+                    . '?exclude=hourly,daily,minutely,flags'
+                    . (empty($queryParams) ?'': '&'.$queryParams))
                 ->getBody()
                 ->getContents();
 
