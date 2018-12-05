@@ -33,7 +33,7 @@ class WeatherProxyController extends Controller
         $this->weatherStore = WeatherStore::forModel(static::CACHE_MODEL);
     }
 
-    public function index($lat, $lang)
+    public function index($lat, $lang, Request $request)
     {
         if (!$this->weatherStore->exists(static::CACHE_API_KEY)) {
             throw ValidationException::withMessages([
@@ -41,13 +41,15 @@ class WeatherProxyController extends Controller
             ]);
         }
 
-        if ($this->weatherStore->exists('location:'.$lat.$lang)) {
-            return $this->weatherStore->get('location:'.$lat.$lang);
+        $unit = $request->get('unit', 'auto');
+
+        if ($this->weatherStore->exists('location:'.$unit.$lat.$lang)) {
+            return $this->weatherStore->get('location:'.$unit.$lat.$lang);
         }
 
-        $this->weatherStore->save('location:'.$lat.$lang, function () use ($lat, $lang) {
+        $this->weatherStore->save('location:'.$unit.$lat.$lang, function () use ($lat, $lang, $unit) {
             $weatherJson = (new Client)
-                ->get('https://api.darksky.net/forecast/' . $this->weatherStore->first(static::CACHE_API_KEY) . '/'.$lat.','.$lang)
+                ->get('https://api.darksky.net/forecast/' . $this->weatherStore->first(static::CACHE_API_KEY) . '/'.$lat.','.$lang . '?units=' . $unit . '&exclude=hourly,daily,minutely,flags')
                 ->getBody()
                 ->getContents();
 
@@ -56,7 +58,7 @@ class WeatherProxyController extends Controller
             return $decoded;
         });
 
-        return collect($this->weatherStore->first('location:'.$lat.$lang));
+        return collect($this->weatherStore->first('location:'.$unit.$lat.$lang));
     }
 
     public function saveKey(Request $request)

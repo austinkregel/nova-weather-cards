@@ -21,7 +21,7 @@ class CardServiceProvider extends ServiceProvider
         });
 
         Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-weather-cards', __DIR__.'/../dist/js/card.js');
+            Nova::script('nova-weather-cards', __DIR__.'/../dist/js/weather-card.js');
             Nova::style('nova-weather-cards', __DIR__.'/../dist/css/card.css');
         });
     }
