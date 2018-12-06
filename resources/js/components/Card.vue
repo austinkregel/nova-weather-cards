@@ -1,6 +1,6 @@
 <template>
     <card class="flex flex-col items-center justify-center h-full">
-        <div v-if="loadingGeo" class="text-center">
+        <div v-if="loadingGeo" class="text-center p-4">
             Loading your geolocation...
             <i class="fa fa-refresh fa-spin"></i>
         </div>
@@ -70,9 +70,14 @@ export default {
             return navigator.language.split('-')[0]
         }
     },
+    watch: {
+        unit() {
+            this.$toasted.clear()
+            this.getWeather()
+        }
+    },
     methods: {
         url(latitude, longitude) {
-            console.log(this.language);
             return '/nova-vendor/nova-weather-cards/weather-proxy/' + latitude + '/' + longitude + '?unit=' + this.unit + '&lang=' + this.language
         },
         weatherIcon() {
@@ -86,29 +91,32 @@ export default {
         },
         getWeather() {
             this.loadingGeo = true;
-            if (!(this.card.coords && this.card.coords.length == 2) && navigator.geolocation) {
+            const weatherResults = (res) => {
+                res.data[0].alerts.forEach(bit => {
+                    this.$toasted.show(bit.description, {
+                        type: bit.severity === 'warning' ? 'error':'info',
+                        fullWidth: true,
+                        duration: 20 * 1000
+                    })
+                })
+                this.weather = res.data;
+                this.disablePrompts()
+                axios.get('/nova-vendor/nova-weather-cards/weather-icons/' + this.weatherIcon())
+                    .then(res => (this.image = res.data))
+                    .catch(err => (console.log('Failed to load the icon')));
+
+            }
+
+            if (!(this.card.coords) && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(position => {
                     axios.get(this.url(position.coords.latitude, position.coords.longitude))
-                        .then(res => {
-                            this.weather = res.data;
-                            this.disablePrompts()
-                            axios.get('/nova-vendor/nova-weather-cards/weather-icons/' + this.weatherIcon())
-                                .then(res => (this.image = res.data))
-                                .catch(err => (console.log('Failed to load the icon')));
-                        })
-                        .catch(err => (this.promptForAKey()));
+                        .then(weatherResults)
+                        .catch(err => () => {this.promptForAKey()});
                 }, () => (console.log('Failed to get locations')));
-            } else if (this.card.coords && this.card.coords.length == 2) {
+            } else if (this.card.coords) {
                 axios.get(this.url(this.card.coords[0], this.card.coords[1]))
-                    .then(res => {
-                        console.log("Weather is:", res.data)
-                        this.weather = res.data;
-                        this.disablePrompts()
-                        axios.get('/nova-vendor/nova-weather-cards/weather-icons/' + this.weatherIcon())
-                            .then(res => (this.image = res.data))
-                            .catch(err => (console.log('Failed to load the icon')));
-                    })
-                    .catch(err => (this.promptForAKey()));
+                    .then(weatherResults)
+                    .catch(err => () => {this.promptForAKey()});
 
             } else {
                 this.loadingGeo = false;
@@ -124,25 +132,21 @@ export default {
         },
         changeToF() {
             this.unit = 'us';
-            this.getWeather();
-
             localStorage.setItem('weather_unit', this.unit)
             Nova.$emit('kregel-weather-card:update-units', this.unit)
         },
         changeToC() {
             this.unit = 'si';
-            this.getWeather();
             localStorage.setItem('weather_unit', this.unit)
             Nova.$emit('kregel-weather-card:update-units', this.unit)
         }
     },
     mounted() {
+        // Nova.$off('kregel-weather-card:update-units')
         Nova.$on('kregel-weather-card:update-units', (unit) => {
-            this.unit  = unit;
-            Nova.$emit('kregel-weather-card:update-weather');
+            this.unit = unit;
         })
 
-        Nova.$on('kregel-weather-card:update-weather', () => this.getWeather());
         this.getWeather();
     },
 }
